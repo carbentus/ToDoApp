@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>To Do List</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+    <link rel="stylesheet" href="./css/main.min.css" />
+  </head>
+  <body class="has-mouse">
+    <div class="container">
+      <!-- SEARCH -->
+      <section class="search">
+        <input
+          type="text"
+          id="search"
+          class="search__input"
+          placeholder="Search task..."
+          autofocus
+        />
+        <button class="search__btn-back" aria-label="close search input">
+          <i class="fa fa-arrow-left" aria-hidden="true"></i>
+        </button>
+        <button class="search__btn-clear" aria-label="clear search input">
+          <i class="fa fa-times-circle" aria-hidden="true"></i>
+        </button>
+        <button class="search__btn-loupe" aria-label="search a task">
+          <i class="fa fa-search" aria-hidden="true" role="presentation"></i>
+        </button>
+      </section>
+      <header class="header">
+        <h1 class="header__hello" tabindex="-1">Hello, Sarah</h1>
+        <p class="header__p">You're doing great this week!</p>
+      </header>
+
+      <!-- NAVIGATION   TABS -->
+      <nav class="nav-status">
+        <button class="nav-status__btn nav-status__btn--active" id="tab-all">
+          All
+        </button>
+        <button class="nav-status__btn" id="tab-active">Active</button>
+        <button class="nav-status__btn" id="tab-completed">Completed</button>
+      </nav>
+      <!-- JSON -->
+      <script id="data-source" type="text/json">
+        [
+          {
+            "id": 1,
+            "isCompleted": false,
+            "text": "1.  Visit at the denstist."
+          },
+          {
+            "id": 2,
+            "isCompleted": true,
+            "text": "Prepare a shopping list for the weekend trip (food, equipment, cosmetics). Prepare a shopping list for the weekend trip (food, equipment, cosmetics)"
+          },
+          {
+            "id": 3,
+            "isCompleted": true,
+            "text": "3.  Book flights"
+          },
+          {
+            "id": 4,
+            "isCompleted": false,
+            "text": "Take a dog to the wet. Visit Book Booksss Food flight for Lorem ipsum dolor sit amet, consectetur adipisicing . Officia laborum id accusantium voluptatibus? Blanditiis quis animi unde quas nulla voluptatibus?"
+          },
+
+          {
+            "id": 5,
+            "isCompleted": false,
+            "text": "book, dog, flight"
+          },
+          {
+            "id": 6,
+            "isCompleted": false,
+            "text": "Lorem ipsum dolor sit amet. book, dog, flight. prepare dinner"
+          }
+        ]
+      </script>
+
+      <!-- Task list -->
+      <section class="task-list">
+        <ul id="list-container"></ul>
+      </section>
+      <footer class="footer">
+        <button
+          class="footer__btn-add-task btn-round"
+          aria-label="add new task"
+        >
+          <i class="fa fa-plus btn-round__icon" aria-hidden="true"></i>
+        </button>
+      </footer>
+      <!--  NEW TASK CONTAINER -->
+      <div class="new-task-container new-task-container-hide">
+        <button class="new-task-container__btn-back-to-list">
+          <i class="fa fa-long-arrow-left" aria-hidden="true"></i>
+          <p>Back to list</p>
+        </button>
+        <!-- <button class="new-task-container__btn-close-x">
+          <i class="fa fa-times" aria-hidden="true"></i>
+        </button> -->
+        <h1 class="new-task-container__title">Create new task</h1>
+        <textarea
+          class="new-task-container__textarea"
+          autofocus
+          placeholder="Write your task..."
+        ></textarea>
+        <div class="new-task-container__bcg-for-btn">
+          <button class="new-task-container__btn-confirm">Add Task</button>
+        </div>
+      </div>
+      <!--  EDIT TASK CONTAINER -->
+      <div class="edit-task-container edit-task-container-hide">
+        <button class="edit-task-container__btn-back-to-list">
+          <i class="fa fa-long-arrow-left" aria-hidden="true"></i>
+          <p>Back to list</p>
+        </button>
+        <!-- <button class="edit-task-container__btn-close-x">
+          <i class="fa fa-times" aria-hidden="true"></i>
+        </button> -->
+        <h1 class="edit-task-container__title">Edit your task</h1>
+        <textarea
+          class="edit-task-container__textarea"
+          autofocus
+          placeholder="Write your task..."
+        ></textarea>
+        <div class="edit-task-container__bcg-for-btn">
+          <button class="edit-task-container__btn-save">Save</button>
+        </div>
+      </div>
+      <!-- MODAL -->
+
+      <div class="modal-overlay">
+        <div class="modal-overlay__window">
+          <!-- EMPTY -->
+          <!-- modal-container-empty--active -->
+          <div class="modal-container-empty">
+            <div class="modal-container-empty__message">
+              To save a task, enter a content.
+            </div>
+            <div
+              class="modal-container-empty__btns-container modal-btns-container"
+            >
+              <button
+                class="modal-btns-container__btn modal-container-empty__btn-ok"
+              >
+                ok
+              </button>
+            </div>
+          </div>
+          <!-- DELETE -->
+          <!-- modal-container-delete--active -->
+          <div class="modal-container-delete">
+            <div class="modal-container-delete__message">Delete this task?</div>
+            <div
+              class="
+                modal-container-delete__btns-container
+                modal-btns-container
+              "
+            >
+              <button
+                class="
+                  modal-btns-container__btn modal-btns-container__btn--dark
+                  modal-container-delete__btn-delete
+                "
+              >
+                delete
+              </button>
+              <button
+                class="
+                  modal-btns-container__btn
+                  modal-container-delete__btn-cancel
+                "
+              >
+                cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="./mouseListener.js"></script>
+    <script src="./mobile.js"></script>
+    <script src="./main.js"></script>
+  </body>
+</html>
