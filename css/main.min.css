@@ -96,7 +96,7 @@ body.has-mouse *:focus {
   width: 100%;
 }
 
-.search__input---active {
+.search__input--active {
   display: block;
   padding: 16px 48px;
 }
@@ -595,7 +595,7 @@ body.has-mouse *:focus {
   z-index: -10;
 }
 
-.modal-overlay---active {
+.modal-overlay--active {
   visibility: visible;
   z-index: 10;
 }
@@ -630,8 +630,8 @@ body.has-mouse *:focus {
   display: none;
 }
 
-.modal-container-empty---active,
-.modal-container-delete---active {
+.modal-container-empty--active,
+.modal-container-delete--active {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -639,8 +639,8 @@ body.has-mouse *:focus {
       flex-wrap: wrap;
 }
 
-.modal-container-empty---active > *,
-.modal-container-delete---active > * {
+.modal-container-empty--active > *,
+.modal-container-delete--active > * {
   -ms-flex-preferred-size: 100%;
       flex-basis: 100%;
 }

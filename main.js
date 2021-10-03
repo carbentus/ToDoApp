@@ -1,16 +1,24 @@
-// BUG: VIOLENCE
+let tabData = JSON.parse(document.querySelector('#data-source').innerHTML);
 
 const MAX_TAB_HEIGHT = 132; // 3x line height, wrap overflowing text
-let tabData = JSON.parse(document.querySelector('#data-source').innerHTML);
+const SELECTOR_LOUPE = '.search__btn-loupe';
+const SELECTOR_SEARCH_BACK_BTN = '.search__btn-back';
+const SELECTOR_SEARCH_CLEAR_BTN = '.search__btn-clear';
+const SELECTOR_SEARCH_INPUT = '.search__input';
 
 const state = {
   currentTaskId: '',
 };
 
-const loupe = document.querySelector('.search__btn-loupe');
-const searchInput = document.querySelector('.search__input');
-const searchBackBtn = document.querySelector('.search__btn-back');
-const searchClearBtn = document.querySelector('.search__btn-clear');
+const appElements = {
+  loupeBtnEl: document.querySelector(SELECTOR_LOUPE),
+  searchBackBtnEl: document.querySelector(SELECTOR_SEARCH_BACK_BTN),
+  searchClearBtnEl: document.querySelector(SELECTOR_SEARCH_CLEAR_BTN),
+  searchInputEl: document.querySelector(SELECTOR_SEARCH_INPUT),
+};
+
+const { loupeBtnEl, searchBackBtnEl, searchClearBtnEl, searchInputEl } =
+  appElements;
 
 const initList = () => {
   // ----- CLOSE THE TASK -Start
@@ -29,7 +37,6 @@ const initList = () => {
   const closeTheTask = (ev) => {
     const currentItem = ev.currentTarget;
     currentItem.parentNode.parentNode.classList.toggle('task-list__task-done');
-    console.log(currentItem.parentNode.parentNode);
     const currentItemId = currentItem.getAttribute('data-id');
     renderClosedTasks(currentItem, currentItemId);
   };
@@ -39,21 +46,6 @@ const initList = () => {
     checkBox.addEventListener('click', closeTheTask);
   });
   // ----- CLOSE THE TASK - End
-
-  // ----- Switch TABS  (All/Active/Completed)
-  const allTabs = document.querySelectorAll('.nav-status__btn');
-  const allTabsArray = [...allTabs];
-
-  allTabsArray.forEach((tab) => {
-    tab.addEventListener('click', (ev) => {
-      const currentItem = ev.currentTarget;
-
-      allTabsArray.forEach((tab) => {
-        tab.classList.remove('nav-status__btn--active');
-      });
-      currentItem.classList.add('nav-status__btn--active');
-    });
-  });
 
   // ----- DELETE TASK on Swipe
   const allTrashBin = document.querySelectorAll(
@@ -71,6 +63,22 @@ const initList = () => {
     pencil.addEventListener('click', handlePencilClick);
   });
 };
+//  *** initList END
+
+// ----- Switch TABS  (All/Active/Completed)
+const allTabs = document.querySelectorAll('.nav-status__btn');
+const allTabsArray = [...allTabs];
+
+allTabsArray.forEach((tab) => {
+  tab.addEventListener('click', (ev) => {
+    const currentItem = ev.currentTarget;
+
+    allTabsArray.forEach((tab) => {
+      tab.classList.remove('nav-status__btn--active');
+    });
+    currentItem.classList.add('nav-status__btn--active');
+  });
+});
 
 // Highlight searched text
 const addHighlight = (text, searchText) => {
@@ -92,27 +100,26 @@ const resizeTaskContent = function (ev) {
     contentToExpand.classList.add('task-list__task-description--shorten');
   }
 };
-//  *** initList END
 
 // SEARCH INPUT
 const showSearchInput = () => {
-  searchInput.classList.add('search__input---active');
-  loupe.classList.add('search__btn-loupe--inactive');
-  searchBackBtn.classList.add('search__btn-back--active');
-  searchClearBtn.classList.add('search__btn-clear--active');
-  searchInput.focus();
+  searchInputEl.classList.add('search__input--active');
+  loupeBtnEl.classList.add('search__btn-loupe--inactive');
+  searchBackBtnEl.classList.add('search__btn-back--active');
+  searchClearBtnEl.classList.add('search__btn-clear--active');
+  searchInputEl.focus();
 };
 
 const closeSearchInput = () => {
-  searchInput.classList.remove('search__input---active');
-  loupe.classList.remove('search__btn-loupe--inactive');
-  searchBackBtn.classList.remove('search__btn-back--active');
-  searchClearBtn.classList.remove('search__btn-clear--active');
+  searchInputEl.classList.remove('search__input--active');
+  loupeBtnEl.classList.remove('search__btn-loupe--inactive');
+  searchBackBtnEl.classList.remove('search__btn-back--active');
+  searchClearBtnEl.classList.remove('search__btn-clear--active');
   clearSearchInput();
 };
 
-searchBackBtn.addEventListener('click', closeSearchInput);
-loupe.addEventListener('click', showSearchInput);
+searchBackBtnEl.addEventListener('click', closeSearchInput);
+loupeBtnEl.addEventListener('click', showSearchInput);
 
 const shortenLongTask = (task) => {
   const itemHeight = task.clientHeight;
@@ -129,15 +136,10 @@ const shortenLongTask = (task) => {
   }
 };
 
-// selectTaskDesktop = () => {
-//   console.log('select Task funkcja działa');
-//   newChild.classList.toggle('selected');
-// };
-
 const renderList = (items, searchText = '') => {
   const listContainer = document.querySelector('#list-container');
   listContainer.innerHTML = '';
-  //
+
   items.forEach((item) => {
     const newChild = document.createElement('li');
     newChild.classList.add('task-list__task');
@@ -154,13 +156,6 @@ const renderList = (items, searchText = '') => {
       newChild.classList.add('task-list__task-done');
     }
 
-    // ITEM/TASK selection
-    // newChild.setAttribute('draggable', true);
-    // newChild.addEventListener('click', function () {
-    //   console.log('select Task funkcja działa');
-    //   newChild.classList.toggle('selected');
-    // });
-
     // ---- Task SWIPE  START
     let touchstartX = 0;
     let touchendX = 0;
@@ -176,8 +171,6 @@ const renderList = (items, searchText = '') => {
       }
     }
 
-    // BUG [Violation] Added non-passive event listener to a scroll-blocking <some> event. Consider marking event handler as 'passive' to make the page more responsive. See <URL>
-    // main.js:177 [Violation] Added non-passive event listener to a scroll-blocking 'touchstart' event. Consider marking event handler as 'passive' to make the page more responsive. See https://www.chromestatus.com/feature/5745543795965952
     newChild.addEventListener('touchstart', (ev) => {
       touchstartX = ev.changedTouches[0].screenX;
     });
@@ -192,9 +185,6 @@ const renderList = (items, searchText = '') => {
     if (searchText) {
       itemText = addHighlight(itemText, searchText);
     }
-
-    // FIXME: checkboxes are not accessible with the keyboard.
-    // console.log(itemText);
     newChild.innerHTML = `
     <div class="task-list__text-container">
 			<input type="checkbox" class="task-list__checkbox" id="task_checkbox${
@@ -231,7 +221,7 @@ const showAll = () => {
 
 const tabActive = document.getElementById('tab-active');
 tabActive.addEventListener('click', function () {
-  if (loupe.classList.contains('search__btn-loupe--inactive')) {
+  if (loupeBtnEl.classList.contains('search__btn-loupe--inactive')) {
     closeSearchInput();
   } else {
     filterActive();
@@ -240,7 +230,7 @@ tabActive.addEventListener('click', function () {
 
 const tabCompleted = document.getElementById('tab-completed');
 tabCompleted.addEventListener('click', function () {
-  if (loupe.classList.contains('search__btn-loupe--inactive')) {
+  if (loupeBtnEl.classList.contains('search__btn-loupe--inactive')) {
     closeSearchInput();
   } else {
     filterCompleted();
@@ -249,7 +239,7 @@ tabCompleted.addEventListener('click', function () {
 
 const tabAll = document.getElementById('tab-all');
 tabAll.addEventListener('click', function () {
-  if (loupe.classList.contains('search__btn-loupe--inactive')) {
+  if (loupeBtnEl.classList.contains('search__btn-loupe--inactive')) {
     closeSearchInput();
   } else {
     showAll();
@@ -299,10 +289,10 @@ const filterTasksAccStatus = () => {
 
 // clear search input
 const clearSearchInput = () => {
-  searchInput.value = '';
+  searchInputEl.value = '';
   filterTasksAccStatus();
 };
-searchClearBtn.addEventListener('click', clearSearchInput);
+searchClearBtnEl.addEventListener('click', clearSearchInput);
 // --- end SEARCH TASK function
 
 // *** DELETE TASK on swipe - Start
@@ -316,11 +306,9 @@ const renderTaskAfterDelete = (currentItemId) => {
 };
 
 const deleteTask = (ev) => {
-  console.log(tabData);
   hideModalDelete();
   const currentItemId = state.currentTaskId;
   renderTaskAfterDelete(currentItemId);
-  console.log(tabData);
   state.currentTaskId = '';
 };
 // *** DELETE TASK on swipe - End
@@ -340,13 +328,13 @@ const modalBtnCancel = document.querySelector(
 
 const showModalEmpty = () => {
   removeSwipe();
-  modalOverlay.classList.add('modal-overlay---active');
-  modalEmpty.classList.add('modal-container-empty---active');
+  modalOverlay.classList.add('modal-overlay--active');
+  modalEmpty.classList.add('modal-container-empty--active');
 };
 
 const hideModalEmpty = () => {
-  modalOverlay.classList.remove('modal-overlay---active');
-  modalEmpty.classList.remove('modal-container-empty---active');
+  modalOverlay.classList.remove('modal-overlay--active');
+  modalEmpty.classList.remove('modal-container-empty--active');
 };
 
 modalBtnOk.addEventListener('click', hideModalEmpty);
@@ -354,13 +342,14 @@ modalBtnOk.addEventListener('click', hideModalEmpty);
 const showModalDelete = (ev) => {
   const id = getTaskId(ev);
   removeSwipe();
-  modalOverlay.classList.add('modal-overlay---active');
-  modalDelete.classList.add('modal-container-delete---active');
+  modalOverlay.classList.add('modal-overlay--active');
+  modalDelete.classList.add('modal-container-delete--active');
 };
 
 const hideModalDelete = () => {
-  modalOverlay.classList.remove('modal-overlay---active');
-  modalDelete.classList.remove('modal-container-empty---active');
+  modalOverlay.classList.remove('modal-overlay--active');
+  // modalDelete.classList.remove('modal-container-empty--active');
+  modalDelete.classList.remove('modal-container-delete--active');
 };
 modalBtnDelete.addEventListener('click', deleteTask);
 modalBtnCancel.addEventListener('click', hideModalDelete);
@@ -370,7 +359,7 @@ const showNewTaskWindow = () => {
   removeSwipe();
   newTaskWindow.classList.remove('new-task-container-hide');
   document.body.style.overflow = 'hidden';
-  if (loupe.classList.contains('search__btn-loupe--inactive')) {
+  if (loupeBtnEl.classList.contains('search__btn-loupe--inactive')) {
     closeSearchInput();
   } else return;
 };
@@ -385,11 +374,6 @@ const closeNewTaskWindow = () => {
   newTaskWindow.classList.add('new-task-container-hide');
   document.body.style.overflow = 'visible';
 };
-
-// const closeAddNewTaskWindowBtn = document.querySelector(
-//   '.new-task-container__btn-close-x'
-// );
-// closeAddNewTaskWindowBtn.addEventListener('click', closeNewTaskWindow);
 
 // --- ADD NEW TASK   -
 const backToListBtn = document.querySelector(
@@ -428,10 +412,6 @@ const removeSwipe = () => {
 };
 
 // *** EDIT TASK ON SWIPE - Start
-
-// const allPencil = document.querySelectorAll(
-//   'button.task-list__btn-edit-delete.pencil'
-// );
 
 const backToListSaveBtn = document.querySelector(
   '.edit-task-container__btn-back-to-list'
@@ -495,8 +475,6 @@ const saveEditedTask = () => {
 saveTaskBtn.addEventListener('click', saveEditedTask);
 backToListSaveBtn.addEventListener('click', closeEditTaskWindow);
 // closeEditTaskWindowBtn.addEventListener('click', closeEditTaskWindow);
-
-// *** EDIT TASK ON SWIPE - End
 
 // On start
 showAll();

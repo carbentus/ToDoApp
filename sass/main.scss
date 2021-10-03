@@ -90,7 +90,7 @@ body.has-mouse *:focus {
   width: 100%;
 }
 
-.search__input---active {
+.search__input--active {
   display: block;
   padding: 16px 48px;
 }
@@ -505,7 +505,7 @@ body.has-mouse *:focus {
   width: 100%;
   z-index: -10;
 
-  &---active {
+  &--active {
     visibility: visible;
     z-index: 10;
   }
@@ -533,7 +533,7 @@ body.has-mouse *:focus {
 .modal-container-empty,
 .modal-container-delete {
   display: none;
-  &---active {
+  &--active {
     display: flex;
     flex-wrap: wrap;
     & > * {
