@@ -2,15 +2,20 @@
 
 - SWIPE function to delete or edit the task
 - Move completed task to separate list
-- Filter the tasks according to the status (All / Active / Completed)
+- Filtering the tasks according to the status (All / Active / Completed)
 - Read more.../ read less...
-- filter and highlight search results
-- clean and minimalist design
+- Filtering and highlighting of search results (RegExp)
 - based on JSON file
 - mobile first
+
+## Tech stack:
 
 HTML, BEM, SCSS, JSON, JavaScript
 
 ## Demo
 
-https://github.com/carbentus/ToDoApp/
+https://dalilehk.github.io/ToDoApp/
+
+## Preview on different devices
+
+![alt text](https://github.com/dalilehk/ToDoApp/blob/main/ToDoApp_preview.jpg?raw=true)
