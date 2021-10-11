@@ -22,7 +22,6 @@ const { loupeBtnEl, searchBackBtnEl, searchClearBtnEl, searchInputEl } =
 
 const initList = () => {
   // ----- CLOSE THE TASK -Start
-  // TODO dlaczego renderClosedTasks znajduje się w initList, a nie globalnie?
   const renderClosedTasks = (currentItem, currentItemId) => {
     tabData = tabData.map((item) => {
       if (item.id.toString() === currentItemId) {
