@@ -2,7 +2,21 @@ import { appElements } from './app-elements.js';
 import { closeSearchInput } from './search-bar.js';
 import { tabData, initList, renderList } from './main.js';
 
-const { loupeBtnEl, tabActive, tabCompleted, tabAll } = appElements;
+const { loupeBtnEl, tabActive, tabCompleted, tabAll, allTabs } = appElements;
+
+//  Switch TABS  (All/Active/Completed)
+
+const allTabsArray = [...allTabs];
+allTabsArray.forEach((tab) => {
+  tab.addEventListener('click', (ev) => {
+    const currentItem = ev.currentTarget;
+
+    allTabsArray.forEach((tab) => {
+      tab.classList.remove('nav-status__btn--active');
+    });
+    currentItem.classList.add('nav-status__btn--active');
+  });
+});
 
 const filterActive = () => {
   renderList(tabData.filter((item) => !item.isCompleted));
