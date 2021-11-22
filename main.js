@@ -1,18 +1,19 @@
-let tabData = JSON.parse(document.querySelector('#data-source').innerHTML);
+import { addHighlight } from './search-bar.js';
+import { appElements } from './app-elements.js';
+import { showAll, filterTasksAccStatus } from './tabs-filter.js';
+const { loupeBtnEl, tabActive, tabCompleted, tabAll } = appElements;
+
+export let tabData = JSON.parse(
+  document.querySelector('#data-source').innerHTML
+);
 
 const MAX_TAB_HEIGHT = 132; // 3x line height, wrap overflowing text
-
-const loupeBtnEl = document.querySelector('.search__btn-loupe');
-//   searchBackBtnEl: document.querySelector('.search__btn-back'),
-//   searchClearBtnEl: document.querySelector('.search__btn-clear'),
-//   searchInputEl: document.querySelector('.search__input'),
-// };
 
 const state = {
   currentTaskId: '',
 };
 
-const initList = () => {
+export const initList = () => {
   const renderClosedTasks = (currentItem, currentItemId) => {
     tabData = tabData.map((item) => {
       if (item.id.toString() === currentItemId) {
@@ -69,12 +70,6 @@ allTabsArray.forEach((tab) => {
   });
 });
 
-// Highlight searched text
-const addHighlight = (text, searchText) => {
-  let re = new RegExp(`(${searchText})`, 'ig');
-  return text.replace(re, `<mark>$1</mark>`);
-};
-
 //READ MORE / READ LESS
 const resizeTaskContent = function (ev) {
   const clickedBtn = ev.currentTarget;
@@ -105,7 +100,7 @@ const shortenLongTask = (task) => {
   }
 };
 
-const renderList = (items, searchText = '') => {
+export const renderList = (items, searchText = '') => {
   const listContainer = document.querySelector('#list-container');
   listContainer.innerHTML = '';
 
@@ -150,6 +145,7 @@ const renderList = (items, searchText = '') => {
     });
     // ---- Task swipe END
 
+    // highlight
     let itemText = item.text;
     if (searchText) {
       itemText = addHighlight(itemText, searchText);
@@ -171,89 +167,6 @@ const renderList = (items, searchText = '') => {
     shortenLongTask(taskTextContent);
     newChild.appendChild(taskEditDelete);
   });
-};
-
-const filterActive = () => {
-  renderList(tabData.filter((item) => !item.isCompleted));
-  initList();
-};
-
-const filterCompleted = () => {
-  renderList(tabData.filter((item) => item.isCompleted));
-  initList();
-};
-
-const showAll = () => {
-  renderList(tabData);
-  initList();
-};
-
-const tabActive = document.getElementById('tab-active');
-tabActive.addEventListener('click', function () {
-  if (loupeBtnEl.classList.contains('search__btn-loupe--inactive')) {
-    closeSearchInput();
-  } else {
-    filterActive();
-  }
-});
-
-const tabCompleted = document.getElementById('tab-completed');
-tabCompleted.addEventListener('click', function () {
-  if (loupeBtnEl.classList.contains('search__btn-loupe--inactive')) {
-    closeSearchInput();
-  } else {
-    filterCompleted();
-  }
-});
-
-const tabAll = document.getElementById('tab-all');
-tabAll.addEventListener('click', function () {
-  if (loupeBtnEl.classList.contains('search__btn-loupe--inactive')) {
-    closeSearchInput();
-  } else {
-    showAll();
-  }
-});
-
-// --- start SEARCH TASK function
-// const searchInput = document.getElementById('search');
-const filterSearchTask = (ev) => {
-  const searchText = ev.target.value.toLowerCase();
-  if (tabActive.classList.contains('nav-status__btn--active')) {
-    renderList(
-      tabData.filter(
-        (item) =>
-          item.text.toLowerCase().includes(searchText) && !item.isCompleted
-      ),
-      searchText
-    );
-  } else if (tabCompleted.classList.contains('nav-status__btn--active')) {
-    renderList(
-      tabData.filter(
-        (item) =>
-          item.text.toLowerCase().includes(searchText) && item.isCompleted
-      ),
-      searchText
-    );
-  } else {
-    renderList(
-      tabData.filter((item) => item.text.toLowerCase().includes(searchText)),
-      searchText
-    );
-  }
-};
-document
-  .querySelector('.search__input')
-  .addEventListener('input', filterSearchTask);
-
-export const filterTasksAccStatus = () => {
-  if (tabActive.classList.contains('nav-status__btn--active')) {
-    filterActive();
-  } else if (tabCompleted.classList.contains('nav-status__btn--active')) {
-    filterCompleted();
-  } else {
-    showAll();
-  }
 };
 
 // *** DELETE TASK on swipe - Start

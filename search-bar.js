@@ -1,9 +1,15 @@
-import { filterTasksAccStatus } from './main.js';
+import { tabData, renderList } from './main.js';
+import { filterTasksAccStatus } from './tabs-filter.js';
+import { appElements } from './app-elements.js';
 
-export const loupeBtnEl = document.querySelector('.search__btn-loupe');
-const searchBackBtnEl = document.querySelector('.search__btn-back');
-const searchClearBtnEl = document.querySelector('.search__btn-clear');
-const searchInputEl = document.querySelector('.search__input');
+const {
+  loupeBtnEl,
+  searchBackBtnEl,
+  searchClearBtnEl,
+  searchInputEl,
+  tabActive,
+  tabCompleted,
+} = appElements;
 
 // SEARCH INPUT
 const clearSearchInput = () => {
@@ -19,7 +25,7 @@ const showSearchInput = () => {
   searchInputEl.focus();
 };
 
-const closeSearchInput = () => {
+export const closeSearchInput = () => {
   searchInputEl.classList.remove('search__input--active');
   loupeBtnEl.classList.remove('search__btn-loupe--inactive');
   searchBackBtnEl.classList.remove('search__btn-back--active');
@@ -27,8 +33,39 @@ const closeSearchInput = () => {
   clearSearchInput();
 };
 
-// Listeners
+export const addHighlight = (text, searchText) => {
+  let re = new RegExp(`(${searchText})`, 'ig');
+  return text.replace(re, `<mark>$1</mark>`);
+};
 
+const filterSearchTask = (ev) => {
+  const searchText = ev.target.value.toLowerCase();
+  if (tabActive.classList.contains('nav-status__btn--active')) {
+    renderList(
+      tabData.filter(
+        (item) =>
+          item.text.toLowerCase().includes(searchText) && !item.isCompleted
+      ),
+      searchText
+    );
+  } else if (tabCompleted.classList.contains('nav-status__btn--active')) {
+    renderList(
+      tabData.filter(
+        (item) =>
+          item.text.toLowerCase().includes(searchText) && item.isCompleted
+      ),
+      searchText
+    );
+  } else {
+    renderList(
+      tabData.filter((item) => item.text.toLowerCase().includes(searchText)),
+      searchText
+    );
+  }
+};
+
+// Listeners
 loupeBtnEl.addEventListener('click', showSearchInput);
 searchBackBtnEl.addEventListener('click', closeSearchInput);
 searchClearBtnEl.addEventListener('click', clearSearchInput);
+searchInputEl.addEventListener('input', filterSearchTask);
