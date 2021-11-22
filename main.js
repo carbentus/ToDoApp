@@ -1,17 +1,12 @@
-import { appElements } from './app-elements.js';
 import { addHighlight } from './search-bar.js';
-import { addListenerTrashBins } from './delete-task.js';
 import { addListenerPencils } from './edit-task.js';
-import { showAll, filterTasksAccStatus } from './tabs-filter.js';
+import { addListenerTrashBins } from './delete-task.js';
 import { removeSwipe } from './helpers.js';
+import { shortenLongTask } from './read-more-less.js';
 
 export let tabData = JSON.parse(
   document.querySelector('#data-source').innerHTML
 );
-
-const MAX_TAB_HEIGHT = 132; // 3x line height, wrap overflowing text
-
-// const { editTaskWindow } = appElements;
 
 export const state = {
   currentTaskId: '',
@@ -36,6 +31,8 @@ export const initList = () => {
     renderClosedTasks(currentItem, currentItemId);
   };
 
+  // Add Listeners to tasks elements
+
   const allCheckBox = document.querySelectorAll('input.task-list__checkbox');
   allCheckBox.forEach((checkBox) => {
     checkBox.addEventListener('click', closeTheTask);
@@ -45,36 +42,6 @@ export const initList = () => {
   addListenerTrashBins();
 };
 //  *** initList END
-
-//READ MORE / READ LESS
-const resizeTaskContent = function (ev) {
-  const clickedBtn = ev.currentTarget;
-  const contentToExpand = clickedBtn.previousElementSibling;
-  if (
-    contentToExpand.classList.contains('task-list__task-description--shorten')
-  ) {
-    clickedBtn.innerText = 'read less...';
-    contentToExpand.classList.remove('task-list__task-description--shorten');
-  } else {
-    clickedBtn.innerText = 'read more...';
-    contentToExpand.classList.add('task-list__task-description--shorten');
-  }
-};
-
-const shortenLongTask = (task) => {
-  const itemHeight = task.clientHeight;
-
-  if (itemHeight > MAX_TAB_HEIGHT) {
-    const taskParagraph = task.lastElementChild;
-    taskParagraph.classList.add('task-list__task-description--shorten');
-    const btnReadMore = document.createElement('button');
-    task.classList.add('task-list__task--long');
-    task.appendChild(btnReadMore);
-    btnReadMore.classList.add('task-list__btn-read-more');
-    btnReadMore.innerText = 'read more...';
-    btnReadMore.addEventListener('click', resizeTaskContent);
-  }
-};
 
 export const renderList = (items, searchText = '') => {
   const listContainer = document.querySelector('#list-container');
@@ -96,9 +63,10 @@ export const renderList = (items, searchText = '') => {
       newChild.classList.add('task-list__task-done');
     }
 
-    // ---- Task SWIPE  START
+    // // ---- Task SWIPE  START
     let touchstartX = 0;
     let touchendX = 0;
+
     function handleGestureX() {
       if (touchendX - touchstartX > 60) {
         taskEditDelete.classList.remove('active-swipe');
@@ -145,5 +113,10 @@ export const renderList = (items, searchText = '') => {
   });
 };
 
-// Handle READ MORE on resize
-window.addEventListener('resize', filterTasksAccStatus);
+export const showAll = () => {
+  renderList(tabData);
+  initList();
+};
+
+// On start
+showAll();

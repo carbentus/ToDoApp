@@ -1,6 +1,6 @@
 import { appElements } from './app-elements.js';
 import { closeSearchInput } from './search-bar.js';
-import { tabData, initList, renderList } from './main.js';
+import { tabData, initList, showAll, renderList } from './main.js';
 
 const { loupeBtnEl, tabActive, tabCompleted, tabAll, allTabs } = appElements;
 
@@ -28,10 +28,10 @@ const filterCompleted = () => {
   initList();
 };
 
-export const showAll = () => {
-  renderList(tabData);
-  initList();
-};
+// export const showAll = () => {
+//   renderList(tabData);
+//   initList();
+// };
 
 export const filterTasksAccStatus = () => {
   if (tabActive.classList.contains('nav-status__btn--active')) {

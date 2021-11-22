@@ -13,3 +13,15 @@ export const removeSwipe = () => {
     swipedTask.classList.remove('active-swipe');
   });
 };
+
+export const handleGestureX = (touchstartX, touchendX) => {
+  if (touchendX - touchstartX > 60) {
+    taskEditDelete.classList.remove('active-swipe');
+    taskTextContent.classList.remove('active-swipe');
+  }
+  if (touchendX - touchstartX < -60) {
+    removeSwipe();
+    taskEditDelete.classList.add('active-swipe');
+    taskTextContent.classList.add('active-swipe');
+  }
+};

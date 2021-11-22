@@ -1,8 +1,7 @@
 import { appElements } from './app-elements.js';
-import { tabData } from './main.js';
+import { tabData, showAll } from './main.js';
 import { removeSwipe } from './helpers.js';
 import { showModalEmpty } from './modal.js';
-import { showAll } from './tabs-filter.js';
 
 const { addTaskBtn, backToListBtn, loupeBtnEl, newTaskTextInput } = appElements;
 

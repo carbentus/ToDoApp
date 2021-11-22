@@ -1,5 +1,4 @@
 import { appElements } from './app-elements.js';
-import { deleteTask } from './delete-task.js';
 import { getTaskId, removeSwipe } from './helpers.js';
 
 const { modalOverlay, modalEmpty, modalDelete, modalBtnOk } = appElements;

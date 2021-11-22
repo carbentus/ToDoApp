@@ -1,7 +1,6 @@
 import { appElements } from './app-elements.js';
 import { showModalDelete, hideModalDelete } from './modal.js';
-import { showAll } from './tabs-filter.js';
-import { state, tabData } from './main.js';
+import { state, tabData, showAll } from './main.js';
 
 const { modalBtnDelete, modalBtnCancel } = appElements;
 
