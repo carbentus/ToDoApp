@@ -1,27 +1,18 @@
 let tabData = JSON.parse(document.querySelector('#data-source').innerHTML);
 
 const MAX_TAB_HEIGHT = 132; // 3x line height, wrap overflowing text
-const SELECTOR_LOUPE = '.search__btn-loupe';
-const SELECTOR_SEARCH_BACK_BTN = '.search__btn-back';
-const SELECTOR_SEARCH_CLEAR_BTN = '.search__btn-clear';
-const SELECTOR_SEARCH_INPUT = '.search__input';
+
+const loupeBtnEl = document.querySelector('.search__btn-loupe');
+//   searchBackBtnEl: document.querySelector('.search__btn-back'),
+//   searchClearBtnEl: document.querySelector('.search__btn-clear'),
+//   searchInputEl: document.querySelector('.search__input'),
+// };
 
 const state = {
   currentTaskId: '',
 };
 
-const appElements = {
-  loupeBtnEl: document.querySelector(SELECTOR_LOUPE),
-  searchBackBtnEl: document.querySelector(SELECTOR_SEARCH_BACK_BTN),
-  searchClearBtnEl: document.querySelector(SELECTOR_SEARCH_CLEAR_BTN),
-  searchInputEl: document.querySelector(SELECTOR_SEARCH_INPUT),
-};
-
-const { loupeBtnEl, searchBackBtnEl, searchClearBtnEl, searchInputEl } =
-  appElements;
-
 const initList = () => {
-  // ----- CLOSE THE TASK -Start
   const renderClosedTasks = (currentItem, currentItemId) => {
     tabData = tabData.map((item) => {
       if (item.id.toString() === currentItemId) {
@@ -44,7 +35,6 @@ const initList = () => {
   allCheckBox.forEach((checkBox) => {
     checkBox.addEventListener('click', closeTheTask);
   });
-  // ----- CLOSE THE TASK - End
 
   // ----- DELETE TASK on Swipe
   const allTrashBin = document.querySelectorAll(
@@ -99,26 +89,6 @@ const resizeTaskContent = function (ev) {
     contentToExpand.classList.add('task-list__task-description--shorten');
   }
 };
-
-// SEARCH INPUT
-const showSearchInput = () => {
-  searchInputEl.classList.add('search__input--active');
-  loupeBtnEl.classList.add('search__btn-loupe--inactive');
-  searchBackBtnEl.classList.add('search__btn-back--active');
-  searchClearBtnEl.classList.add('search__btn-clear--active');
-  searchInputEl.focus();
-};
-
-const closeSearchInput = () => {
-  searchInputEl.classList.remove('search__input--active');
-  loupeBtnEl.classList.remove('search__btn-loupe--inactive');
-  searchBackBtnEl.classList.remove('search__btn-back--active');
-  searchClearBtnEl.classList.remove('search__btn-clear--active');
-  clearSearchInput();
-};
-
-searchBackBtnEl.addEventListener('click', closeSearchInput);
-loupeBtnEl.addEventListener('click', showSearchInput);
 
 const shortenLongTask = (task) => {
   const itemHeight = task.clientHeight;
@@ -276,7 +246,7 @@ document
   .querySelector('.search__input')
   .addEventListener('input', filterSearchTask);
 
-const filterTasksAccStatus = () => {
+export const filterTasksAccStatus = () => {
   if (tabActive.classList.contains('nav-status__btn--active')) {
     filterActive();
   } else if (tabCompleted.classList.contains('nav-status__btn--active')) {
@@ -285,14 +255,6 @@ const filterTasksAccStatus = () => {
     showAll();
   }
 };
-
-// clear search input
-const clearSearchInput = () => {
-  searchInputEl.value = '';
-  filterTasksAccStatus();
-};
-searchClearBtnEl.addEventListener('click', clearSearchInput);
-// --- end SEARCH TASK function
 
 // *** DELETE TASK on swipe - Start
 const renderTaskAfterDelete = (currentItemId) => {
